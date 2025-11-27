@@ -8,7 +8,8 @@
     overflow: hidden;
 }
 
-.login-left, .login-right {
+.login-left,
+.login-right {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -33,11 +34,6 @@
     gap: 1rem;
 }
 
-.brand-logo svg {
-    width: 60px;
-    height: 80px;
-}
-
 .brand-text {
     font-size: 2rem;
     font-weight: 300;
@@ -53,7 +49,7 @@
 
 .welcome-text {
     font-size: 3rem;
-    font-weight: 200; /* Thin font */
+    font-weight: 200;
     margin-bottom: 0.5rem;
     letter-spacing: 1px;
 }
@@ -66,32 +62,94 @@
     margin-bottom: 3rem;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
+/* Underline Input Styles - Robust Reset */
+.login-container .form-groupLine {
+    margin-bottom: 2.5rem !important;
+    position: relative !important;
 }
 
-.login-input {
+.login-container .login-input {
     width: 100%;
-    padding: 12px 15px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    outline: none;
-    background-color: white;
-    color: #333;
+    padding: 12px 0 !important;
+
+    /* Explicitly reset all borders */
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+    border-radius: 0 !important;
+    font-size: 1rem;
+    outline: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    color: white !important;
+    transition: all 0.3s ease;
+    box-shadow: none !important;
+
+    /* Remove browser default appearances */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
 }
 
-.login-input::placeholder {
-    color: #aaa;
+.login-container .login-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 1px;
 }
 
+/* Autofill Fix - Prevent browser from injecting background color */
+.login-container .login-input:-webkit-autofill,
+.login-container .login-input:-webkit-autofill:hover,
+.login-container .login-input:-webkit-autofill:focus,
+.login-container .login-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #002b36 inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Focus effects for dark theme */
+.login-container .login-input:focus {
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 2px solid #f26522 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Light theme input styles */
+.login-container .login-input.light {
+    color: #333 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
+}
+
+.login-container .login-input.light::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* Autofill Fix for Light Theme */
+.login-container .login-input.light:-webkit-autofill,
+.login-container .login-input.light:-webkit-autofill:hover,
+.login-container .login-input.light:-webkit-autofill:focus,
+.login-container .login-input.light:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #f5f5f5 inset !important;
+    -webkit-text-fill-color: #333 !important;
+}
+
+.login-container .login-input.light:focus {
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 2px solid #f26522 !important;
+}
+
 .login-btn {
     width: 100%;
     padding: 12px;
-    background-color: #f26522; /* Orange */
+    background-color: #f26522;
     color: white;
     border: none;
     border-radius: 4px;
@@ -113,21 +171,14 @@
     cursor: not-allowed;
 }
 
-.forgot-password {
-    display: block;
-    margin-top: 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.forgot-password:hover {
-    color: white;
+.error-message {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
 }
 
 .theme-toggle {
@@ -144,6 +195,11 @@
     justify-content: center;
     cursor: pointer;
     color: white;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* Responsive */
@@ -151,21 +207,21 @@
     .login-container {
         flex-direction: column;
     }
-    
+
     .login-divider {
         display: none;
     }
-    
+
     .login-left {
         flex: 0 0 auto;
         padding-top: 4rem;
         padding-bottom: 1rem;
     }
-    
+
     .brand-text {
         font-size: 1.5rem;
     }
-    
+
     .welcome-text {
         font-size: 2rem;
     }

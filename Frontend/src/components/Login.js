@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Moon, Sun } from 'lucide-react';
 import { authAPI } from '../services/api';
 import './Login.css';
+import logo from '../assets/logo.png';
 
 function Login() {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -10,6 +11,11 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const [isDark, setIsDark] = useState(true);
     const navigate = useNavigate();
+
+    // Clear any existing credentials when component mounts
+    useEffect(() => {
+        setCredentials({ username: '', password: '' });
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,16 +36,27 @@ function Login() {
         }
     };
 
+    const inputStyle = {
+        border: 'none',
+        borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.3)' : '1px solid rgba(0, 0, 0, 0.3)',
+        borderRadius: '0',
+        backgroundColor: 'transparent',
+        color: isDark ? 'white' : '#333',
+        outline: 'none',
+        boxShadow: 'none',
+        padding: '12px 0',
+        width: '100%',
+        fontSize: '1rem',
+        transition: 'all 0.3s ease'
+    };
+
     return (
         <div className="login-container" style={{ backgroundColor: isDark ? '#002b36' : '#f5f5f5', color: isDark ? 'white' : '#333' }}>
             {/* Left Side - Branding */}
             <div className="login-left">
                 <div className="brand-container">
                     <div className="brand-logo">
-                        <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
-                            <path d="M20 10 Q30 0 40 10 L40 40 Q30 50 20 40 Z" fill="#22d3ee" />
-                            <path d="M20 40 Q30 30 40 40 L40 70 Q30 80 20 70 Z" fill="#f97316" />
-                        </svg>
+                        <img src={logo} alt="Brand Logo" style={{ width: '50px', height: '50px', marginTop: '.9rem' }} />
                     </div>
                     <h1 className="brand-text" style={{ color: isDark ? 'white' : '#002b36' }}>
                         LESTORA.
@@ -72,34 +89,36 @@ function Login() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
+                    <form onSubmit={handleSubmit} autoComplete="off">
+                        <div className="form-groupLine">
                             <input
                                 type="text"
-                                className="login-input"
+                                className={`login-input ${!isDark ? 'light' : ''}`}
                                 placeholder="USERNAME"
                                 value={credentials.username}
                                 onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-                                style={{
-                                    backgroundColor: isDark ? 'white' : '#fff',
-                                    border: isDark ? 'none' : '1px solid #ddd'
-                                }}
                                 required
+                                style={inputStyle}
+                                onFocus={(e) => e.target.style.borderBottom = '2px solid #f26522'}
+                                onBlur={(e) => e.target.style.borderBottom = isDark ? '1px solid rgba(255, 255, 255, 0.3)' : '1px solid rgba(0, 0, 0, 0.3)'}
+                                autoComplete="new-username"
+                                id="username-login"
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-groupLine">
                             <input
                                 type="password"
-                                className="login-input"
+                                className={`login-input ${!isDark ? 'light' : ''}`}
                                 placeholder="PASSWORD"
                                 value={credentials.password}
                                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                                style={{
-                                    backgroundColor: isDark ? 'white' : '#fff',
-                                    border: isDark ? 'none' : '1px solid #ddd'
-                                }}
                                 required
+                                style={inputStyle}
+                                onFocus={(e) => e.target.style.borderBottom = '2px solid #f26522'}
+                                onBlur={(e) => e.target.style.borderBottom = isDark ? '1px solid rgba(255, 255, 255, 0.3)' : '1px solid rgba(0, 0, 0, 0.3)'}
+                                autoComplete="new-password"
+                                id="password-login"
                             />
                         </div>
 
@@ -107,8 +126,6 @@ function Login() {
                             {loading ? 'LOGGING IN...' : 'LOGIN'}
                         </button>
                     </form>
-
-
                 </div>
             </div>
 

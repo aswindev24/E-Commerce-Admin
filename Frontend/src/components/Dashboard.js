@@ -20,6 +20,7 @@ import Products from './Products';
 import Orders from './Orders';
 import ChangePassword from './ChangePassword';
 import './Dashboard.css';
+import admin from '../assets/admin.jpg'
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -202,6 +203,15 @@ function DashboardHome() {
 
     return (
         <div>
+            <div className="welcome-admin">
+                <div className="welcome-message">
+                    <h3>Welcome back</h3>
+                    <p>Let's start our day with great energy! </p>
+                </div>
+                <div className="admin-photo">
+                    <img src={admin} alt="Admin" />
+                </div>
+            </div>
             <div className="stats-grid">
                 <StatCard title="Total Categories" value={stats.totalCategories} icon={<Folder size={24} />} color="#667eea" />
                 <StatCard title="Total Products" value={stats.totalProducts} icon={<Package size={24} />} color="#f093fb" />
@@ -270,7 +280,9 @@ function DashboardHome() {
                         </PieChart>
                     </ResponsiveContainer>
                 </div>
+
             </div>
+
         </div>
     );
 }
