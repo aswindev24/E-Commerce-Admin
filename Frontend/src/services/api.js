@@ -21,6 +21,19 @@ api.interceptors.request.use(
     }
 );
 
+// Handle 401 responses
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
+    }
+);
+
 // Auth API
 export const authAPI = {
     login: (credentials) => api.post('/auth/login', credentials),
@@ -72,6 +85,37 @@ export const orderAPI = {
     create: (data) => api.post('/orders', data),
     update: (id, data) => api.put(`/orders/${id}`, data),
     delete: (id) => api.delete(`/orders/${id}`),
+};
+
+// Coupon API
+export const couponAPI = {
+    getAll: () => api.get('/coupons'),
+    getOne: (id) => api.get(`/coupons/${id}`),
+    create: (data) => api.post('/coupons', data),
+    update: (id, data) => api.put(`/coupons/${id}`, data),
+    delete: (id) => api.delete(`/coupons/${id}`),
+    validate: (data) => api.post('/coupons/validate', data),
+    apply: (data) => api.post('/coupons/apply', data),
+    getStats: (id) => api.get(`/coupons/${id}/stats`),
+};
+
+// Offer Image API
+export const offerImageAPI = {
+    getAll: () => api.get('/offer-images'),
+    getOne: (id) => api.get(`/offer-images/${id}`),
+    create: (data) => {
+        if (data instanceof FormData) {
+            return api.post('/offer-images', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        }
+        return api.post('/offer-images', data);
+    },
+    update: (id, data) => {
+        if (data instanceof FormData) {
+            return api.put(`/offer-images/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+        }
+        return api.put(`/offer-images/${id}`, data);
+    },
+    delete: (id) => api.delete(`/offer-images/${id}`),
 };
 
 export default api;

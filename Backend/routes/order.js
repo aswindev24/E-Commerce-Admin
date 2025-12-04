@@ -43,7 +43,9 @@ router.get('/', async (req, res) => {
 
         // Get paginated orders
         const orders = await Order.find(filter)
-            .populate('items.product', 'name price')
+            .populate('user', 'firstName lastName email phoneNumber')
+            .populate('address')
+            .populate('items.product', 'name price images')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limitNum);
@@ -72,6 +74,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const order = await Order.findById(req.params.id)
+            .populate('user', 'firstName lastName email phoneNumber')
+            .populate('address')
             .populate('items.product', 'name price images');
 
         if (!order) {
@@ -79,34 +83,6 @@ router.get('/:id', async (req, res) => {
         }
 
         res.json({ success: true, order });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// @route   POST /api/orders
-// @desc    Create order (for testing purposes)
-// @access  Private
-router.post('/', async (req, res) => {
-    try {
-        const { customer, items, totalAmount, paymentMethod } = req.body;
-
-        // Generate order number
-        const orderNumber = 'ORD' + Date.now();
-
-        const order = await Order.create({
-            orderNumber,
-            customer,
-            items,
-            totalAmount,
-            paymentMethod: paymentMethod || 'cash'
-        });
-
-        const populatedOrder = await Order.findById(order._id)
-            .populate('items.product', 'name price');
-
-        res.status(201).json({ success: true, order: populatedOrder });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -132,7 +108,9 @@ router.put('/:id', async (req, res) => {
         await order.save();
 
         const populatedOrder = await Order.findById(order._id)
-            .populate('items.product', 'name price');
+            .populate('user', 'firstName lastName email phoneNumber')
+            .populate('address')
+            .populate('items.product', 'name price images');
 
         res.json({ success: true, order: populatedOrder });
     } catch (error) {

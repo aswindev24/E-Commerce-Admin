@@ -8,6 +8,10 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+// Register models
+require('./models/User');
+require('./models/Address');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -22,6 +26,8 @@ app.use('/api/categories', require('./routes/category'));
 app.use('/api/subcategories', require('./routes/subcategory'));
 app.use('/api/products', require('./routes/product'));
 app.use('/api/orders', require('./routes/order'));
+app.use('/api/coupons', require('./routes/coupon'));
+app.use('/api/offer-images', require('./routes/offerImage'));
 
 // Health check route
 app.get('/api/health', (req, res) => {

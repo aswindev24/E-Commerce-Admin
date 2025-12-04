@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Key, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
+import { Key, Eye, EyeOff, CheckCircle, AlertCircle, Lock, Shield } from 'lucide-react';
 import './ChangePassword.css';
 
 function ChangePassword() {
@@ -21,7 +21,6 @@ function ChangePassword() {
             ...formData,
             [e.target.name]: e.target.value
         });
-        // Clear message when user starts typing
         if (message.text) {
             setMessage({ type: '', text: '' });
         }
@@ -103,105 +102,168 @@ function ChangePassword() {
     };
 
     return (
-        <div className="change-password-container">
-            <div className="change-password-card">
-                <div className="card-header">
-                    <div className="header-icon">
-                        <Key size={28} />
+        <div className="change-password-wrapper">
+            <div className="change-password-container">
+                {/* Security Badge */}
+                <div className="security-badge">
+                    <div className="security-badge-inner">
+                        <Shield className="security-badge-icon" />
+                        <span className="security-badge-text">Secure Password Update</span>
                     </div>
-                    <h2>Change Password</h2>
-                    <p>Update your admin account password</p>
                 </div>
 
-                {message.text && (
-                    <div className={`message ${message.type}`}>
-                        {message.type === 'success' ? (
-                            <CheckCircle size={20} />
-                        ) : (
-                            <AlertCircle size={20} />
+                {/* Main Card */}
+                <div className="change-password-card">
+                    {/* Header with Gradient */}
+                    <div className="card-header">
+                        <div className="card-header-content">
+                            <div className="header-icon">
+                                <Key />
+                            </div>
+                            <h2>Change Password</h2>
+                            <p>Keep your account secure with a strong password</p>
+                        </div>
+                        {/* Decorative elements */}
+                        <div className="decorative-circle-1"></div>
+                        <div className="decorative-circle-2"></div>
+                    </div>
+
+                    {/* Form Container */}
+                    <div className="password-form-container">
+                        {/* Message */}
+                        {message.text && (
+                            <div className={`message ${message.type}`}>
+                                {message.type === 'success' ? (
+                                    <CheckCircle />
+                                ) : (
+                                    <AlertCircle />
+                                )}
+                                <span>{message.text}</span>
+                            </div>
                         )}
-                        <span>{message.text}</span>
-                    </div>
-                )}
 
-                <form onSubmit={handleSubmit} className="password-form">
-                    <div className="form-group">
-                        <label htmlFor="currentPassword">Current Password</label>
-                        <div className="password-input-wrapper">
-                            <input
-                                type={showPasswords.current ? 'text' : 'password'}
-                                id="currentPassword"
-                                name="currentPassword"
-                                value={formData.currentPassword}
-                                onChange={handleChange}
-                                placeholder="Enter current password"
-                                disabled={loading}
-                            />
+                        {/* Form */}
+                        <div className="password-form">
+                            {/* Current Password */}
+                            <div className="form-group">
+                                <label htmlFor="currentPassword">
+                                    <Lock />
+                                    Current Password
+                                </label>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPasswords.current ? 'text' : 'password'}
+                                        id="currentPassword"
+                                        name="currentPassword"
+                                        value={formData.currentPassword}
+                                        onChange={handleChange}
+                                        placeholder="Enter your current password"
+                                        disabled={loading}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="toggle-password"
+                                        onClick={() => togglePasswordVisibility('current')}
+                                        tabIndex="-1"
+                                    >
+                                        {showPasswords.current ? <EyeOff /> : <Eye />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* New Password */}
+                            <div className="form-group">
+                                <label htmlFor="newPassword">
+                                    <Lock />
+                                    New Password
+                                </label>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPasswords.new ? 'text' : 'password'}
+                                        id="newPassword"
+                                        name="newPassword"
+                                        value={formData.newPassword}
+                                        onChange={handleChange}
+                                        placeholder="Enter new password (min. 6 characters)"
+                                        disabled={loading}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="toggle-password"
+                                        onClick={() => togglePasswordVisibility('new')}
+                                        tabIndex="-1"
+                                    >
+                                        {showPasswords.new ? <EyeOff /> : <Eye />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div className="form-group">
+                                <label htmlFor="confirmPassword">
+                                    <Lock />
+                                    Confirm New Password
+                                </label>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPasswords.confirm ? 'text' : 'password'}
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        placeholder="Confirm your new password"
+                                        disabled={loading}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="toggle-password"
+                                        onClick={() => togglePasswordVisibility('confirm')}
+                                        tabIndex="-1"
+                                    >
+                                        {showPasswords.confirm ? <EyeOff /> : <Eye />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Submit Button */}
                             <button
-                                type="button"
-                                className="toggle-password"
-                                onClick={() => togglePasswordVisibility('current')}
-                                tabIndex="-1"
+                                onClick={handleSubmit}
+                                className="submit-btn"
+                                disabled={loading}
                             >
-                                {showPasswords.current ? <EyeOff size={18} /> : <Eye size={18} />}
+                                {loading ? (
+                                    <>
+                                        <div className="loading-spinner"></div>
+                                        <span>Changing Password...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Key />
+                                        <span>Change Password</span>
+                                    </>
+                                )}
                             </button>
                         </div>
-                    </div>
 
-                    <div className="form-group">
-                        <label htmlFor="newPassword">New Password</label>
-                        <div className="password-input-wrapper">
-                            <input
-                                type={showPasswords.new ? 'text' : 'password'}
-                                id="newPassword"
-                                name="newPassword"
-                                value={formData.newPassword}
-                                onChange={handleChange}
-                                placeholder="Enter new password (min. 6 characters)"
-                                disabled={loading}
-                            />
-                            <button
-                                type="button"
-                                className="toggle-password"
-                                onClick={() => togglePasswordVisibility('new')}
-                                tabIndex="-1"
-                            >
-                                {showPasswords.new ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </button>
+                        {/* Security Tip */}
+                        <div className="security-tip">
+                            <div className="security-tip-content">
+                                <Shield className="security-tip-icon" />
+                                <div>
+                                    <h3>Security Tip</h3>
+                                    <p>Use a strong password with a mix of letters, numbers, and symbols. Avoid using the same password across multiple sites.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="form-group">
-                        <label htmlFor="confirmPassword">Confirm New Password</label>
-                        <div className="password-input-wrapper">
-                            <input
-                                type={showPasswords.confirm ? 'text' : 'password'}
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                placeholder="Confirm new password"
-                                disabled={loading}
-                            />
-                            <button
-                                type="button"
-                                className="toggle-password"
-                                onClick={() => togglePasswordVisibility('confirm')}
-                                tabIndex="-1"
-                            >
-                                {showPasswords.confirm ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </button>
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="submit-btn"
-                        disabled={loading}
-                    >
-                        {loading ? 'Changing Password...' : 'Change Password'}
-                    </button>
-                </form>
+                {/* Footer */}
+                <div className="password-footer">
+                    <p>
+                        Need help? <a href="#">Contact Support</a>
+                    </p>
+                </div>
             </div>
         </div>
     );

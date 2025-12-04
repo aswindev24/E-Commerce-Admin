@@ -1,67 +1,81 @@
 const mongoose = require('mongoose');
 
+const orderItemSchema = new mongoose.Schema({
+    product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    }
+});
+
 const orderSchema = new mongoose.Schema({
-    orderNumber: {
+    orderId: {
         type: String,
         required: true,
         unique: true
     },
-    customer: {
-        name: {
-            type: String,
-            required: true
-        },
-        email: {
-            type: String,
-            required: true
-        },
-        phone: {
-            type: String,
-            required: true
-        },
-        address: {
-            street: String,
-            city: String,
-            state: String,
-            zipCode: String,
-            country: String
-        }
-    },
-    items: [{
-        product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
-            required: true
-        },
-        name: String,
-        quantity: {
-            type: Number,
-            required: true,
-            min: 1
-        },
-        price: {
-            type: Number,
-            required: true
-        }
-    }],
-    totalAmount: {
-        type: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
+    },
+    items: [orderItemSchema],
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+        required: true
+    },
+    subtotal: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    discount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    tax: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    total: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    couponCode: {
+        type: String,
+        trim: true
+    },
+    paymentId: {
+        type: String,
+        trim: true
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'completed', 'failed'],
+        default: 'pending'
+    },
+    paymentMethod: {
+        type: String,
+        default: 'razorpay'
     },
     status: {
         type: String,
         enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
         default: 'pending'
-    },
-    paymentStatus: {
-        type: String,
-        enum: ['pending', 'paid', 'failed', 'refunded'],
-        default: 'pending'
-    },
-    paymentMethod: {
-        type: String,
-        enum: ['cash', 'card', 'upi', 'netbanking'],
-        default: 'cash'
     },
     createdAt: {
         type: Date,

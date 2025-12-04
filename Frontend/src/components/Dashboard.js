@@ -11,7 +11,9 @@ import {
     X,
     Clock,
     CheckCircle,
-    Key
+    Key,
+    Tag,
+    Image as ImageIcon
 } from 'lucide-react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Categories from './Categories';
@@ -19,6 +21,8 @@ import SubCategories from './SubCategories';
 import Products from './Products';
 import Orders from './Orders';
 import ChangePassword from './ChangePassword';
+import Coupons from './Coupons';
+import OfferImages from './OfferImages';
 import './Dashboard.css';
 import admin from '../assets/admin.jpg'
 
@@ -80,6 +84,12 @@ function Dashboard() {
                     <NavLink to="/dashboard/orders" active={isActive('/dashboard/orders')} icon={<ShoppingCart size={20} />}>
                         Orders
                     </NavLink>
+                    <NavLink to="/dashboard/coupons" active={isActive('/dashboard/coupons')} icon={<Tag size={20} />}>
+                        Coupons
+                    </NavLink>
+                    <NavLink to="/dashboard/offer-images" active={isActive('/dashboard/offer-images')} icon={<ImageIcon size={20} />}>
+                        Offer Images
+                    </NavLink>
                     <NavLink to="/dashboard/change-password" active={isActive('/dashboard/change-password')} icon={<Key size={20} />}>
                         Change Password
                     </NavLink>
@@ -121,6 +131,8 @@ function Dashboard() {
                         <Route path="subcategories" element={<SubCategories />} />
                         <Route path="products" element={<Products />} />
                         <Route path="orders" element={<Orders />} />
+                        <Route path="coupons" element={<Coupons />} />
+                        <Route path="offer-images" element={<OfferImages />} />
                         <Route path="change-password" element={<ChangePassword />} />
                     </Routes>
                 </div>
@@ -199,14 +211,14 @@ function DashboardHome() {
     ];
 
     const COLORS = ['#10b981', '#f59e0b', '#667eea'];
-    const PIE_COLORS = ['#667eea', '#f093fb'];
+    const PIE_COLORS = ['#249e34ff', '#667eea'];
 
     return (
         <div>
-            <div className="welcome-admin">
+            <div className="welcome-admin"  >
                 <div className="welcome-message">
                     <h3>Welcome back</h3>
-                    <p>Let's start our day with great energy! </p>
+                    <p>Let's start our day with great energy!</p>
                 </div>
                 <div className="admin-photo">
                     <img src={admin} alt="Admin" />
@@ -251,6 +263,7 @@ function DashboardHome() {
                 </div>
 
                 {/* Pie Chart - Categories & Products */}
+                {/* Pie Chart - Categories & Products */}
                 <div className="chart-card">
                     <h3 className="chart-title">Categories vs Products</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -262,11 +275,16 @@ function DashboardHome() {
                                 labelLine={false}
                                 label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
                                 outerRadius={100}
-                                fill="#8884d8"
                                 dataKey="value"
+                            // REMOVED: fill="#8884d8" 
                             >
                                 {categoryProductData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={PIE_COLORS[index % PIE_COLORS.length]}
+                                        stroke="#ffffff"
+                                        strokeWidth={2}
+                                    />
                                 ))}
                             </Pie>
                             <Tooltip
@@ -308,6 +326,8 @@ function getPageTitle(pathname) {
         '/dashboard/subcategories': 'SubCategory Management',
         '/dashboard/products': 'Product Inventory',
         '/dashboard/orders': 'Order Management',
+        '/dashboard/coupons': 'Coupon Management',
+        '/dashboard/offer-images': 'Offer Images Management',
         '/dashboard/change-password': 'Change Password'
     };
     return titles[pathname] || 'Dashboard';

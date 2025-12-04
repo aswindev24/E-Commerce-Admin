@@ -69,9 +69,9 @@
 }
 
 .nav-link.active {
-    background-color: rgba(34, 211, 238, 0.1);
-    color: #22d3ee;
-    border-left: 3px solid #22d3ee;
+    background-color: #027bc1;
+    color: #ffffff;
+    border-left: 3px solid #ffffff;
 }
 
 .nav-icon {

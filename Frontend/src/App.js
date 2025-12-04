@@ -27,7 +27,7 @@ function App() {
                         <PrivateRoute>
                             <Dashboard />
                         </PrivateRoute>
-                    }
+                     }
                 />
             </Routes>
         </Router>

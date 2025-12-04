@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const SubCategory = require('../models/SubCategory');
+const Product = require('../models/Product');
 const authMiddleware = require('../middleware/auth');
 
 // Apply auth middleware to all routes
@@ -103,7 +104,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // @route   DELETE /api/subcategories/:id
-// @desc    Delete subcategory
+// @desc    Delete subcategory and associated products
 // @access  Private
 router.delete('/:id', async (req, res) => {
     try {
@@ -113,9 +114,12 @@ router.delete('/:id', async (req, res) => {
             return res.status(404).json({ message: 'SubCategory not found' });
         }
 
+        // Delete associated products
+        await Product.deleteMany({ subCategory: subCategory._id });
+
         await subCategory.deleteOne();
 
-        res.json({ success: true, message: 'SubCategory deleted successfully' });
+        res.json({ success: true, message: 'SubCategory and associated products deleted successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
